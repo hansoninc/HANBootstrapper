@@ -33,3 +33,14 @@ User Access Options allow you to choose which WordPress users are permitted acce
 
 ![HBS Posts Screen](https://github.com/hansoninc/HanBootStrapper-for-WordPress/blob/master/images/screens/hbs-screen-users.png)
 
+#### Theme level requirements
+
+In order for your theme to output the correct data-section and data-page attribute values. You must call the below functions within your theme's body tag. If you're using HanTheme this is not neccessary as it's bundled with the theme.
+
+![HBS Posts Screen](https://github.com/hansoninc/HanBootStrapper-for-WordPress/blob/master/images/screens/hbs-screen-dsdp.png)
+
+### Working with JS Controllers
+
+![HBS Posts Screen](https://github.com/hansoninc/HanBootStrapper-for-WordPress/blob/master/images/screens/hbs-project-screen.png)
+
+Bring the HanBootStrapper for Wordpress "theme" folder files into your local project. The controller folder name should match the plugin namespace options. You will also need to update the namespace within main.js and any controllers you clone.
