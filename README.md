@@ -1,6 +1,8 @@
 # HanBootStrapper-for-WordPress
 This plugin works in conjunction with the internal HanBootStrapper JS. This plugin installs hbs.js automatically and allows developers to hook in javascript controllers based on pages, sections and actions.
 
+![HBS Main Screen](https://github.com/hansoninc/HanBootStrapper-for-WordPress/blob/master/images/screens/hbs-screen.png)
+
 ## Install
 
 1. Download or Clone Plugin
@@ -9,6 +11,9 @@ This plugin works in conjunction with the internal HanBootStrapper JS. This plug
 
 ## Settings & Configuration
 A menu will appear within the WordPress Dashboard menu labeled "HanBootStrapper" containing options for Namespace, Custom Post Types and User Access.
+
+![HBS Main Screen](https://github.com/hansoninc/HanBootStrapper-for-WordPress/blob/master/images/screens/hbs-screen-menu.png)
+
 
 #### General Settings
 **Project Namespace** - This should be the 3 letter job-code used for the project. This will need to match the activated themes /assets/js/ controller path. *e.g. /assets/js/HAN.*
