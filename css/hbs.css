@@ -1,0 +1,123 @@
+.form-table {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.form-table th {
+	padding: 10px 10px 10px 0;
+	vertical-align: middle;
+	width: 175px;
+}
+
+.form-table td {
+	padding: 5px;
+}
+
+.form-table td input[type="text"],
+.form-table td textarea,
+#hanbs_datasection,
+#hanbs_datapage {
+	padding: 10px;
+	min-width: 183px;
+	margin: 0;
+}
+
+textarea.hbs-funk {
+	padding: 10px;
+	min-height: 63px;
+	min-width: 400px;
+}
+
+p.nomargin {
+	margin-bottom: 0px;
+}
+
+p.intro {
+	margin-bottom: 0; 
+	padding-bottom: 0;
+}
+
+small.footnote {
+	display: block;
+	margin-bottom: 5px;
+}
+
+/* POST SCREENS */
+
+.post-box {
+	border-bottom: 1px solid #efefef; 
+	margin-bottom: 10px;
+}
+
+.field-box {
+	width: 50%; 
+	display: inline-block;
+}
+
+.field-label {
+	margin-bottom: 0px; 
+	font-weight: bold;
+}
+
+.post-field {
+	width: 90%;
+}
+
+.field-label-prefix {
+	background: #f5f5f5;
+    display: inline-block;
+    vertical-align: top;
+    padding: 10px 10px 11px 10px;
+    border: 1px solid #dedede;
+    position: relative;
+    right: -1px;
+    color: #888;
+}
+
+.cpt-field-wrap {
+	display: inline-block;
+	margin-right: 10px;
+}
+
+div.cpt-wrap .form-table th {
+	width: 150px;
+}
+
+div.saved-flag {
+	display: inline-block;
+	font-size: 20px;
+}
+
+div.saved-flag:before {
+	color: green;
+	font-size: 30px;
+	padding: 0px;
+}
+
+span.light {
+	font-weight: normal;
+	color: #bbb;
+}
+
+div.alert.danger {
+	display: inline-block;
+	padding: 10px 30px;
+	color: #a94442;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    border-radius: 3px;
+}
+
+div.alert.danger.hide {
+	display: none;
+}
+
+div.submit-alert {
+	margin-bottom: 10px;
+}
+
+div.submit-alert.hide {
+	display: none;
+}
