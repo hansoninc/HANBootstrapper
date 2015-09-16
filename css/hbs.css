@@ -44,6 +44,12 @@ small.footnote {
 	margin-bottom: 5px;
 }
 
+.plugin-hanson-logo {
+	position: absolute;
+	right: 20px;
+	top: 20px;
+}
+
 /* POST SCREENS */
 
 .post-box {
@@ -99,6 +105,11 @@ div.saved-flag:before {
 span.light {
 	font-weight: normal;
 	color: #bbb;
+	font-size: 12px;
+}
+
+span.small {
+	font-size: 12px;
 }
 
 div.alert.danger {

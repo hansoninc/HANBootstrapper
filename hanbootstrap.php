@@ -24,8 +24,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-class HanBsSettings
-{
+class HanBsSettings{
 	
 	/**
 	 * Holds the values to be used in the fields callbacks
@@ -282,7 +281,9 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 	 * Print the Section text
 	 */
 	public function print_section_info() {
-		print '<p class="intro">Namespace should match the activated themes js controller directory name.</p>';
+		print '<p class="intro">Namespace should match the activated themes js controller directory name.</p>'; ?>
+		<img class="plugin-hanson-logo" src="<?php echo plugin_dir_url( __FILE__ ). 'images/icons/hbs-hanson-logo-lg.png'; ?> ">
+		<?php
 	}
 
 	/**
@@ -372,8 +373,18 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 		$hanbs_option_group = get_option('hanbs_option_name');
 		$user_access = $hanbs_option_group['data-user-'.$login.''];
 		
+		global $current_user;
+		get_currentuserinfo();
+		$logged_in = $current_user->user_login;
+
+		if ($logged_in == $login) {
+			$role_upd = '<span class="small">('.$role.') - Logged In</span>';
+		} else {
+			$role_upd = '<span class="light">('.$role.')</span>';
+		}
+
 		?>
-		<input data-role="<?php echo $role; ?>" class="user-access-option" type="checkbox" id="data-user-<?php echo $login; ?>" name="hanbs_option_name[data-user-<?php echo $login; ?>]" value="<?php echo $login; ?>" <?php if ($user_access == $login) { echo 'checked'; } ?> disabled /> <span class="light">(<?php echo $role; ?>)</span>
+		<input data-role="<?php echo $role; ?>" class="user-access-option not-logged-in" type="checkbox" id="data-user-<?php echo $login; ?>" name="hanbs_option_name[data-user-<?php echo $login; ?>]" value="<?php echo $login; ?>" <?php if ($user_access == $login) { echo 'checked'; } ?> disabled />  <?php echo $role_upd; ?> 
 		<?php
 	}
 }
@@ -387,7 +398,7 @@ if ( is_admin() ) {
 */
 
 function hbs_enqueue_script() {
-	wp_enqueue_script( 'hbs', '/wp-content/plugins/hanbootstrap/js/hbs.js', 'jquery' );
+	wp_enqueue_script( 'hbs', plugin_dir_url( __FILE__ ) . 'js/hbs.js', 'jquery' );
 }
 
 add_action('wp_enqueue_scripts', 'hbs_enqueue_script');

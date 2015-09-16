@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	var $user_options = $('.user-access-option');
+	var $user_options = $('.user-access-option').not('.logged-in');
 
 	//if there's already an item checked, then enable other checkboxes
 	if ($('.user-access-option:checked').length === 1) {
@@ -16,11 +16,12 @@ $(document).ready(function(){
 		if ( len > 0 ) {
 			$('#user-access-notice').addClass('hide');
 			$('.submit-alert').addClass('hide');
-			$('input[name="submit"').removeClass('disabled');
+			$('input[name="submit"]').removeClass('disabled');
+			$('div.submit-alert').hide();
 		} else {
 			$('#user-access-notice').removeClass('hide');
 			$('.submit-alert').removeClass('hide');
-			$('input[name="submit"').addClass('disabled');
+			$('input[name="submit"]').addClass('disabled');
 		}
 	}
 
