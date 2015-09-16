@@ -29,7 +29,7 @@ This portion of the plugin options allows you to set Data Section and Data Page 
 
 #### User Access
 
-User Access Options allow you to choose which WP users are permitted access to use the plugin. If this is the first time visiting the options page, all administrators will be pre-checked. You are required to permit access to at-least one user to prevent being entirely locked out of the plugin.
+User Access Options allow you to choose which WordPress users are permitted access to use the plugin. If this is the first time visiting the options page, all administrators will be pre-checked. You are required to permit access to at-least one user to prevent being entirely locked out of the plugin.
 
-![HBS Posts Screen](https://github.com/hansoninc/HanBootStrapper-for-WordPress/blob/master/images/screens/hbs-screen-users.png?raw=true)
+![HBS Posts Screen](https://github.com/hansoninc/HanBootStrapper-for-WordPress/blob/master/images/screens/hbs-screen-users.png)
 
