@@ -70,20 +70,20 @@ class HanBsSettings{
 	public function enque_plugin_assets() {	
 		if ( is_admin() ) {
 			function is_edit_page($new_edit = null){
-			    global $pagenow;
-			    //make sure we are on the backend
-			    if (!is_admin()) return false;
+				global $pagenow;
+				//make sure we are on the backend
+				if (!is_admin()) return false;
 
 
-			    if ($new_edit == "edit")
-			        return in_array( $pagenow, array( 'post.php',  ) );
-			    elseif($new_edit == "new") //check for new post page
-			        return in_array( $pagenow, array( 'post-new.php' ) );
-			    else //check for either new or edit
-			        return in_array( $pagenow, array( 'post.php', 'post-new.php' ) );
+				if ($new_edit == "edit")
+					return in_array( $pagenow, array( 'post.php',  ) );
+				elseif($new_edit == "new") //check for new post page
+					return in_array( $pagenow, array( 'post-new.php' ) );
+				else //check for either new or edit
+					return in_array( $pagenow, array( 'post.php', 'post-new.php' ) );
 			}
 
-		 	$screen = get_current_screen();
+			$screen = get_current_screen();
 			if ( is_plugin_page() || is_edit_page() ) {
 				$path = plugin_dir_url();
 				wp_enqueue_style( 'hbs-css', $path . 'hanbootstrap/css/hbs.css' );
@@ -174,7 +174,7 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 			$name = $post_type->name;
 			$label = $post_type->label;
 			$args = array (
-	            'name' 	=> $post_type->name,
+				'name' 	=> $post_type->name,
 				'label' => $post_type->label
 			);
 			$callback = array ( $this, 'hanbs_cpts_callback' );
@@ -204,9 +204,9 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 		foreach ( $users as $user ) {
 			$args = array (
 				'user_id' => $user->ID,
-	            'user_login' 	=> $user->user_login,
-	            'display_name' => $user->display_name,
-	            'user_email' => $user->user_email,
+				'user_login' 	=> $user->user_login,
+				'display_name' => $user->display_name,
+				'user_email' => $user->user_email,
 				'user_nicename' => $user->user_nicename,
 				'user_role' => $user->roles[0]
 			);
@@ -330,7 +330,7 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 
 		//Update all Posts with new data attributes
 		if(isset($_GET['settings-updated']) && $_GET['settings-updated']) {
-  			// Update All Posts DataAction and DataPage
+			// Update All Posts DataAction and DataPage
 
 			$args = array( 'post_type' => $name,'posts_per_page' => -1, );
 			$loop = new WP_Query( $args );
@@ -343,9 +343,9 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 				$post_id = get_the_ID();
 
 				if ($post_id) {
-				    // insert post meta
-				    update_post_meta($post_id, '_hanbs_datasection', $hanbs_datasection);
-				    update_post_meta($post_id, '_hanbs_datapage', $hanbs_datapage);
+					// insert post meta
+					update_post_meta($post_id, '_hanbs_datasection', $hanbs_datasection);
+					update_post_meta($post_id, '_hanbs_datapage', $hanbs_datapage);
 				}
 
 			endwhile;
