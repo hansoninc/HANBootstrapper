@@ -43,7 +43,6 @@ class HanBsSettings{
 	 * Add options page
 	 */
 	public function han_bs_pluginpage() {
-		// This page will be under "Settings"
 
 		global $current_user;
 		get_currentuserinfo();
@@ -66,8 +65,8 @@ class HanBsSettings{
 	}
 
 	/**
-	* Enque Plugin Assets
-	*/
+	 * Enque Plugin Assets
+	 */
 	public function enque_plugin_assets() {	
 		if ( is_admin() ) {
 			function is_edit_page($new_edit = null){
@@ -228,10 +227,10 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 	}
 
 	/**
-	* Sanitize each setting field as needed
-	*
-	* @param array $input Contains all settings fields as array keys
-	*/
+	 * Sanitize each setting field as needed
+	 *
+	 * @param array $input Contains all settings fields as array keys
+	 */
 	public function sanitize( $input ) {
 		$new_input = array();
 
@@ -389,13 +388,16 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 	}
 }
 
+/*
+ * Setup Plugin
+ */
 if ( is_admin() ) {
 	$hanbs_settings_page = new HanBsSettings();
 }
 
 /*
  * Enque hbs.js
-*/
+ */
 
 function hbs_enqueue_script() {
 	wp_enqueue_script( 'hbs', plugin_dir_url( __FILE__ ) . 'js/hbs.js', 'jquery' );
@@ -583,8 +585,8 @@ function hanbs_save_postdata( $post_id ) {
 add_action( 'save_post', 'hanbs_save_postdata' );
 
 /*
-* Generate data-section attribute based on associated post/page data
-*/
+ * Generate data-section attribute based on associated post/page data
+ */
 
 function set_nodata_section_notice() {
 	if (is_debugging()) {
@@ -613,8 +615,8 @@ function get_data_section() {
 }
 
 /*
-* Generate data-page attribute based on associated post/page data
-*/
+ * Generate data-page attribute based on associated post/page data
+ */
 function get_data_page() {
 	$data_page = get_post_meta( get_the_ID(), '_hanbs_datapage', true );
 	// check if the meta field has a value
@@ -624,8 +626,8 @@ function get_data_page() {
 }
 
 /*
-* Eqneue section script based on data-section
-*/
+ * Eqneue section script based on data-section
+ */
 function enque_section_script() {
 
 
