@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	var $user_options = $('.user-access-option').not('.logged-in');
+	var $loggedincheckbox = $('input[data-loggedin="true"]');
 
 	//if there's already an item checked, then enable other checkboxes
 	if ($('.user-access-option:checked').length === 1) {
@@ -24,6 +25,24 @@ $(document).ready(function(){
 			$('input[name="submit"]').addClass('disabled');
 		}
 	}
+
+	//On change of logged in checkbox, notify user that they can't block themselves
+	$loggedincheckbox.on('change', function(e) {
+		e.preventDefault();
+		var $this = $(this);
+		$this.prop('checked', true);
+		if ( !$('.access-alert').length ) { 
+			$('.logged-in-notice').append('<span class="access-alert alert alert-danger">You cannot remove access for the user you are logged in as!</span>');
+			setTimeout(function(){
+				$('.access-alert').fadeOut(500);
+			},4000);
+		} else if ( $('.access-alert').is(':hidden') ) {
+			$('.access-alert').show();
+			setTimeout(function(){
+				$('.access-alert').fadeOut(500);
+			},4000);
+		}
+	});
 
 	//On change of user checkboxes set/unset user checkboxes
 	$user_options.on('change', function(){

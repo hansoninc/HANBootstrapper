@@ -1,6 +1,6 @@
 (function() {
 	/**
-	 * @exports HAN.controllers.home
+	 * @exports EPC.controllers.home
 	 * @requires HBS
 	 */
 	var module = {};
