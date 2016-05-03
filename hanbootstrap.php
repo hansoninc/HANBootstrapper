@@ -480,6 +480,35 @@ function hanbs_add_custom_box() {
 }
 add_action( 'add_meta_boxes', 'hanbs_add_custom_box' );
 
+/**
+ * Add HBS to Admin Toolbar
+ *
+ */
+function hanbs_customize_toolbar(){
+	global $wp_admin_bar;
+
+	$args = array(
+		'id'     => 'HBS',
+		'title' => __('<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/hanbootstrap/images/icons/hbs-hanson-logo-white.png" style="vertical-align:middle;margin-right:5px" alt="Han Bootstrapper" title="Han Bootstrapper" />HanBootStrapper' ),
+		'href'   => '/wp-admin/admin.php?page=hanbs-namespace-admin'
+	);
+
+	global $current_user;
+	get_currentuserinfo();
+	$logged_in = $current_user->user_login;
+
+	$hanbs_option_group = get_option('hanbs_option_name');
+	$user_access = $hanbs_option_group['data-user-'.$logged_in.''];
+
+	if ($logged_in == $user_access) {
+
+		$wp_admin_bar->add_menu( $args );
+
+	}
+}
+
+add_action( 'wp_before_admin_bar_render', 'hanbs_customize_toolbar', 999 );	
+
 
 function get_namespace_from_option() {
 	$hanbs_option_group = get_option('hanbs_option_name');
@@ -674,23 +703,25 @@ function get_data_page() {
 */
 function enque_section_script() {
 
-
 	$data_section = get_post_meta( get_the_ID(), '_hanbs_datasection', true );
-
 	if ( ! empty( $data_section ) ) {
-		$section_js = get_template_directory_uri() . "/assets/js/".get_namespace_from_option()."/controllers/$data_section.js";
+		$section_js = get_template_directory_uri()."/assets/js/".get_namespace_from_option()."/controllers/$data_section.js";
 
 		$themedirectory = end((explode('/', get_template_directory())));
-		$section_path = "wp-content/themes/$themedirectory/assets/js/".get_namespace_from_option()."/controllers/$data_section.js";
+		$section_path = get_template_directory()."/assets/js/".get_namespace_from_option()."/controllers/$data_section.js";
+
 		if ( !file_exists($section_path) ) {
-			if (is_debugging()) {
+			if ( is_debugging() ) {
 				echo "<script>console.log('HBS NOTICE: Cannot bootstrap section controller, file missing: /assets/js/".get_namespace_from_option()."/controllers/$data_section.js');</script>";
 			}
 		} else {
 			wp_register_script($data_section, $section_js, array(), null, false);
 			wp_enqueue_script($data_section);
 		}
-
+	} else {
+		if ( is_debugging() ) {
+			echo "Unable to get DataSection from page/post settings. Double check to make sure the template query has been restored to the original/main query. This error is usually thrown as a result of missing wp_reset_query() or wp_reset_postdata().";
+		}
 	}
 }
 
