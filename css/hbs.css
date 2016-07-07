@@ -1,3 +1,7 @@
+#hanbs_sectionid_hidden {
+	display: none !important;
+}
+
 .form-table {
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 10px;
@@ -94,6 +98,9 @@ div.cpt-wrap .form-table th {
 div.saved-flag {
 	display: inline-block;
 	font-size: 20px;
+	vertical-align: middle;
+	top: -7px;
+	position: relative;
 }
 
 div.saved-flag:before {

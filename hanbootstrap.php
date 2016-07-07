@@ -3,7 +3,7 @@
  * Plugin Name: HanBootStrapper for WordPress
  * Plugin URI: http://hansoninc.com
  * Description: This plugin works in conjunction with the internal HanBootStrapper JS. This plugin installs the hbs.js and allows developers to hook in controllers based on pages, sections and actions.
- * Version: 1.1.9.16
+ * Version: 1.7.7.16
  * Author: Mike Louviere / HansonInc
  * Author URI: http://hansoninc.com
  * License: GPL2
@@ -16,7 +16,7 @@
 
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
@@ -24,7 +24,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-class HanBsSettings{
+class HanBsSettings {
 	
 	/**
 	 * Holds the values to be used in the fields callbacks
@@ -43,16 +43,35 @@ class HanBsSettings{
 	 * Add options page
 	 */
 	public function han_bs_pluginpage() {
-		// This page will be under "Settings"
 
 		global $current_user;
 		get_currentuserinfo();
 		$logged_in = $current_user->user_login;
 
+		//print_r($current_user);
+
 		$hanbs_option_group = get_option('hanbs_option_name');
 		$user_access = $hanbs_option_group['data-user-'.$logged_in.''];
 
-		if ($user_access) {
+		/*echo $logged_in;
+		echo $user_access;*/
+
+		//If plugin has had specific users provided access, check to see which users and authorise if needed
+		if ( $hanbs_option_group['hanbs-has-access'] ) {
+			//Check to 
+			if ($logged_in == $user_access) {
+				add_menu_page(
+					'Settings Admin',
+					'HanBootStrapper',
+					'manage_options',
+					'hanbs-namespace-admin',
+					array( $this, 'create_admin_page' ),
+					plugin_dir_url( __FILE__ ).'images/icons/hbs-hanson-logo-white.png',
+					99
+				);
+			}
+		} else {
+			//Otherwise just provide access since it's the first time
 			add_menu_page(
 				'Settings Admin',
 				'HanBootStrapper',
@@ -84,12 +103,13 @@ class HanBsSettings{
 			        return in_array( $pagenow, array( 'post.php', 'post-new.php' ) );
 			}
 
-		 	$screen = get_current_screen();
 			if ( is_plugin_page() || is_edit_page() ) {
 				$path = plugin_dir_url();
 				wp_enqueue_style( 'hbs-css', $path . 'hanbootstrap/css/hbs.css' );
-				wp_enqueue_script( 'jquery-hbs', $path . 'hanbootstrap/js/jquery.1.11.0.js', null, null, true );
-				wp_enqueue_script( 'hbs-validation', $path . 'hanbootstrap/js/hbs_validation.js', 'jquery-hbs', '9880649384aea9f1ee166331c0a30daa', true );
+				if ($_GET["page"] == "hanbs-namespace-admin") {
+					wp_enqueue_script( 'jquery-hbs', $path . 'hanbootstrap/js/jquery.1.11.0.js', null, null, true );
+					wp_enqueue_script( 'hbs-validation', $path . 'hanbootstrap/js/hbs_validation.js', 'jquery-hbs', '9880649384aea9f1ee166331c0a30daa', true );
+				}
 			}
 		}
 	}
@@ -166,11 +186,17 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 			'hanbs-namespace-admin' // Page
 		);
 
+
+
+
 		$cpts_args = array(
 			'public' => true
 		);
+
 		$cpts_output = 'objects'; // names or objects
+
 		$post_types = get_post_types( $cpts_args, $cpts_output );
+
 		foreach( $post_types as $post_type ) {
 			$name = $post_type->name;
 			$label = $post_type->label;
@@ -199,8 +225,10 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 			'hanbs-namespace-admin' // Page
 		);
 
-
-		$users = get_users();
+		$users =  get_users('role=administrator');
+		/*echo '<pre>';
+		print_r($admins);
+		echo '</pre>';*/
 		// Array of stdClass objects.
 		foreach ( $users as $user ) {
 			$args = array (
@@ -243,10 +271,15 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 			$new_input['hanbs_debug'] = sanitize_text_field( $input['hanbs_debug'] );
 		}
 
+		if( isset( $input['hanbs-has-access'] ) ) {
+			$new_input['hanbs-has-access'] = sanitize_text_field( $input['hanbs-has-access'] );
+		}
+
 		//Sanitize CPT fields
 		$cpts_args = array(
 			'public' => true
-		);	
+		);
+
 		$cpts_output = 'objects'; // names or objects
 		$post_types = get_post_types( $cpts_args, $cpts_output );
 		foreach( $post_types as $post_type ) {
@@ -362,6 +395,7 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 	public function hanbs_users_instruction() {	
 		print '<p>Select which users are permitted access to HanBootStrapper settings and features.';
 		print '<div class="alert danger hide" id="user-access-notice">You must provide access to at least one user.</div>';
+		print '<input type="hidden" name="hanbs_option_name[hanbs-has-access]" value="true">';
 	}
 
 	/**
@@ -378,13 +412,23 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 		$logged_in = $current_user->user_login;
 
 		if ($logged_in == $login) {
-			$role_upd = '<span class="small">('.$role.') - Logged In</span>';
+			$logged_in_status = "logged-in";
 		} else {
-			$role_upd = '<span class="light">('.$role.')</span>';
+			$logged_in_status = "not-logged-in";
 		}
 
 		?>
-		<input data-role="<?php echo $role; ?>" class="user-access-option not-logged-in" type="checkbox" id="data-user-<?php echo $login; ?>" name="hanbs_option_name[data-user-<?php echo $login; ?>]" value="<?php echo $login; ?>" <?php if ($user_access == $login) { echo 'checked'; } ?> disabled />  <?php echo $role_upd; ?> 
+		
+		<?php if ( $logged_in == $login ) : ?>
+
+		<input data-role="<?php echo $role; ?>" data-loggedin="true" class="user-access-option <?php echo $logged_in_status; ?>" type="checkbox" id="data-user-<?php echo $login; ?>" name="hanbs_option_name[data-user-<?php echo $login; ?>]" value="<?php echo $login; ?>" checked readonly /> <span class="small logged-in-notice"></span>
+
+		<?php else: ?>
+
+		<input data-role="<?php echo $role; ?>" class="user-access-option <?php echo $logged_in_status; ?>" type="checkbox" id="data-user-<?php echo $login; ?>" name="hanbs_option_name[data-user-<?php echo $login; ?>]" value="<?php echo $login; ?>" <?php if ($user_access == $login) { echo 'checked'; } ?> />  
+
+		<?php endif; ?>
+		
 		<?php
 	}
 }
@@ -398,7 +442,9 @@ if ( is_admin() ) {
 */
 
 function hbs_enqueue_script() {
-	wp_enqueue_script( 'hbs', plugin_dir_url( __FILE__ ) . 'js/hbs.js', 'jquery' );
+	if ( ! is_admin() ) {
+		wp_enqueue_script( 'hbs', plugin_dir_url( __FILE__ ) . 'js/hbs.js', 'jquery' );
+	}
 }
 
 add_action('wp_enqueue_scripts', 'hbs_enqueue_script');
@@ -415,7 +461,7 @@ function hanbs_add_custom_box() {
 	$hanbs_option_group = get_option('hanbs_option_name');
 	$user_access = $hanbs_option_group['data-user-'.$logged_in.''];
 
-	if ($user_access) {
+	if ($logged_in == $user_access) {
 		//Get all pages, posts and custom post types for Meta Box
 		$pagesandposts = get_post_types();
 		//Remove attachment, acf etc
@@ -430,9 +476,53 @@ function hanbs_add_custom_box() {
 				$pagesorpost
 			);
 		}
+	} else if ( $logged_in == !$user_access ) {
+		//Get all pages, posts and custom post types for Meta Box
+		$pagesandposts = get_post_types();
+		//Remove attachment, acf etc
+		$pagesandposts_sanitized = array_diff($pagesandposts, array("attachment", "acf", "revision", "nav_menu_item"));
+
+		foreach ( $pagesandposts_sanitized as $pagesorpost ) {
+
+			add_meta_box(
+				'hanbs_sectionid_hidden',
+				__( 'HanBootStrapper Settings', 'hanbs_textdomain' ),
+				'hanbs_inner_custom_box',
+				$pagesorpost
+			);
+		}
 	}
 }
 add_action( 'add_meta_boxes', 'hanbs_add_custom_box' );
+
+/**
+ * Add HBS to Admin Toolbar
+ *
+ */
+function hanbs_customize_toolbar(){
+	global $wp_admin_bar;
+
+	$args = array(
+		'id'     => 'HBS',
+		'title' => __('<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/hanbootstrap/images/icons/hbs-hanson-logo-white.png" style="vertical-align:middle;margin-right:5px" alt="Han Bootstrapper" title="Han Bootstrapper" />HanBootStrapper' ),
+		'href'   => '/wp-admin/admin.php?page=hanbs-namespace-admin'
+	);
+
+	global $current_user;
+	get_currentuserinfo();
+	$logged_in = $current_user->user_login;
+
+	$hanbs_option_group = get_option('hanbs_option_name');
+	$user_access = $hanbs_option_group['data-user-'.$logged_in.''];
+
+	if ($logged_in == $user_access) {
+
+		$wp_admin_bar->add_menu( $args );
+
+	}
+}
+
+add_action( 'wp_before_admin_bar_render', 'hanbs_customize_toolbar', 999 );	
 
 
 function get_namespace_from_option() {
@@ -483,6 +573,8 @@ function hanbs_inner_custom_box( $post ) {
 	global $current_screen;
 
 	$post_type = get_post_type( $post );
+
+
 
 	if ($post_type == 'page') {
 		echo '<div class="clearfix post-box"><h4>Data Section should match the name of the JavaScript controller you wish to enque.<br> Example: /assets/js/'.get_namespace_from_option().'/'.'controllers/'.$datasection_placeholder.'.js. Where '.$datasection_placeholder.' is the controller name.</h4></div>';
@@ -619,7 +711,7 @@ function get_data_page() {
 	$data_page = get_post_meta( get_the_ID(), '_hanbs_datapage', true );
 	// check if the meta field has a value
 	if( ! empty( $data_page ) ) {
-	  echo $data_page;
+		echo $data_page;
 	}
 }
 
@@ -628,23 +720,25 @@ function get_data_page() {
 */
 function enque_section_script() {
 
-
 	$data_section = get_post_meta( get_the_ID(), '_hanbs_datasection', true );
-
 	if ( ! empty( $data_section ) ) {
-		$section_js = get_template_directory_uri() . "/assets/js/".get_namespace_from_option()."/controllers/$data_section.js";
+		$section_js = get_template_directory_uri()."/assets/js/".get_namespace_from_option()."/controllers/$data_section.js";
 
 		$themedirectory = end((explode('/', get_template_directory())));
-		$section_path = "wp-content/themes/$themedirectory/assets/js/".get_namespace_from_option()."/controllers/$data_section.js";
+		$section_path = get_template_directory()."/assets/js/".get_namespace_from_option()."/controllers/$data_section.js";
+
 		if ( !file_exists($section_path) ) {
-			if (is_debugging()) {
+			if ( is_debugging() ) {
 				echo "<script>console.log('HBS NOTICE: Cannot bootstrap section controller, file missing: /assets/js/".get_namespace_from_option()."/controllers/$data_section.js');</script>";
 			}
 		} else {
 			wp_register_script($data_section, $section_js, array(), null, false);
 			wp_enqueue_script($data_section);
 		}
-
+	} else {
+		if ( is_debugging() ) {
+			echo "Unable to get DataSection from page/post settings. Double check to make sure the template query has been restored to the original/main query. This error is usually thrown as a result of missing wp_reset_query() or wp_reset_postdata().";
+		}
 	}
 }
 
