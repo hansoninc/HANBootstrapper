@@ -24,6 +24,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class HanBsSettings {
 	
 	/**
@@ -737,7 +741,7 @@ function enque_section_script() {
 		}
 	} else {
 		if ( is_debugging() ) {
-			echo "Unable to get DataSection from page/post settings. Double check to make sure the template query has been restored to the original/main query. This error is usually thrown as a result of missing wp_reset_query() or wp_reset_postdata().";
+			echo "<script>console.log('Unable to get DataSection from page/post settings. Double check to make sure the template query has been restored to the original/main query. This error is usually thrown as a result of missing wp_reset_query() or wp_reset_postdata().')</script>";
 		}
 	}
 }
