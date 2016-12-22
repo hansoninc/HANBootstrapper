@@ -3,7 +3,7 @@
  * Plugin Name: HanBootStrapper for WordPress
  * Plugin URI: http://hansoninc.com
  * Description: This plugin works in conjunction with the internal HanBootStrapper JS. This plugin installs the hbs.js and allows developers to hook in controllers based on pages, sections and actions.
- * Version: 1.12.22.16
+ * Version: 1.7.7.16
  * Author: Mike Louviere / HansonInc
  * Author URI: http://hansoninc.com
  * License: GPL2
@@ -28,6 +28,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( !defined( 'HBS_URL' ) ) {
+	define( 'HBS_URL', plugin_dir_url( __FILE__ ) );
+}
+
 class HanBsSettings {
 	
 	/**
@@ -41,7 +45,9 @@ class HanBsSettings {
 		add_action( 'admin_menu', array( $this, 'han_bs_pluginpage' ) );
 		add_action( 'admin_init', array( $this, 'page_init' ) );
 		add_action( 'admin_init', array( $this, 'enque_plugin_assets' ) );
-	}
+
+		
+	}	
 
 	/**
 	 * Add options page
@@ -49,13 +55,16 @@ class HanBsSettings {
 	public function han_bs_pluginpage() {
 
 		global $current_user;
-		get_currentuserinfo();
+		//get_currentuserinfo();  depr. since 4.5.0
+        wp_get_current_user();
 		$logged_in = $current_user->user_login;
 
 		//print_r($current_user);
 
 		$hanbs_option_group = get_option('hanbs_option_name');
 		$user_access = $hanbs_option_group['data-user-'.$logged_in.''];
+
+		
 
 		/*echo $logged_in;
 		echo $user_access;*/
@@ -70,19 +79,19 @@ class HanBsSettings {
 					'manage_options',
 					'hanbs-namespace-admin',
 					array( $this, 'create_admin_page' ),
-					plugin_dir_url( __FILE__ ).'images/icons/hbs-hanson-logo-white.png',
+					HBS_URL.'images/icons/hbs-hanson-logo-white.png',
 					99
 				);
 			}
 		} else {
-			//Otherwise just provide access since it's the first time
+			//Otherwise just provide access to everyone since it's the first time
 			add_menu_page(
 				'Settings Admin',
 				'HanBootStrapper',
 				'manage_options',
 				'hanbs-namespace-admin',
 				array( $this, 'create_admin_page' ),
-				plugin_dir_url( __FILE__ ).'images/icons/hbs-hanson-logo-white.png',
+				HBS_URL.'images/icons/hbs-hanson-logo-white.png',
 				99
 			);
 		}
@@ -107,14 +116,16 @@ class HanBsSettings {
 			        return in_array( $pagenow, array( 'post.php', 'post-new.php' ) );
 			}
 
-			if ( is_plugin_page() || is_edit_page() ) {
-				$path = plugin_dir_url();
-				wp_enqueue_style( 'hbs-css', $path . 'hanbootstrap/css/hbs.css' );
+			//if ( is_plugin_page() || is_edit_page() ) {  is_plugin_page is depr. with no replacement
+            if ( is_edit_page() || is_plugin_page() ) {
+				wp_enqueue_style( 'hbs-css', HBS_URL . 'css/hbs.css' );
 				if ($_GET["page"] == "hanbs-namespace-admin") {
-					wp_enqueue_script( 'jquery-hbs', $path . 'hanbootstrap/js/jquery.1.11.0.js', null, null, true );
-					wp_enqueue_script( 'hbs-validation', $path . 'hanbootstrap/js/hbs_validation.js', 'jquery-hbs', '9880649384aea9f1ee166331c0a30daa', true );
+					wp_enqueue_script( 'jquery-hbs', HBS_URL  . '/js/jquery.1.11.0.js', null, null, true );
+					wp_enqueue_script( 'hbs-validation', HBS_URL  . '/js/hbs_validation.js', 'jquery-hbs', '9880649384aea9f1ee166331c0a30daa', true );
 				}
 			}
+            
+            
 		}
 	}
 
@@ -136,7 +147,7 @@ class HanBsSettings {
 			?>
 			<p class="nomargin"><strong>The code below must be added to the activated theme's body tag.</strong></p>
 			<small class="footnote">Note: This is not necessary when using hantheme.</small>
-			<textarea class="hbs-funk">data-section="&lt;?php get_data_section(); ?&gt;"
+			<textarea class="hbs-funk" readonly>data-section="&lt;?php get_data_section(); ?&gt;"
 data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 			<div class="clearfix">
 				<a href="http://jira.hansoninc.com/browse/HANINT/" target="_blank">Issues? Submit a Ticket</a> | <a href="http://intranet.hansoninc.local/display/engtools/HAN+Bootstrap+Plugin" target="_blank">Get Help</a>
@@ -319,7 +330,7 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 	 */
 	public function print_section_info() {
 		print '<p class="intro">Namespace should match the activated themes js controller directory name.</p>'; ?>
-		<img class="plugin-hanson-logo" src="<?php echo plugin_dir_url( __FILE__ ). 'images/icons/hbs-hanson-logo-lg.png'; ?> ">
+		<img class="plugin-hanson-logo" src="<?php echo HBS_URL. 'images/icons/hbs-hanson-logo-lg.png'; ?> ">
 		<?php
 	}
 
@@ -337,7 +348,7 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 		$hanbs_option_group = get_option('hanbs_option_name');
 		$debug_val = $hanbs_option_group['hanbs_debug'];
 		?>
-			<input type="radio" id="hanbs_debug_yes" name="hanbs_option_name[hanbs_debug]" value="On" <?php if ($debug_val == 'On') echo 'checked'; ?>><label style="margin-right: 10px;" for="hanbs_debug_yes">On</label><input type="radio" id="hanbs_debug_off" name="hanbs_option_name[hanbs_debug]" value="Off" <?php if ($debug_val == 'Off') echo 'checked'; ?>><label for="hanbs_debug_off">Off</label>
+			<input type="radio" id="hanbs_debug_yes" name="hanbs_option_name[hanbs_debug]" value="On" <?php if ($debug_val == 'On') echo 'checked'; ?>><label for="hanbs_debug_yes" class="hbs-label on">On</label><input type="radio" id="hanbs_debug_off" name="hanbs_option_name[hanbs_debug]" value="Off" <?php if ($debug_val == 'Off') echo 'checked'; ?>><label for="hanbs_debug_off" class="hbs-label off">Off</label>
 		<?php
 	}
 
@@ -412,8 +423,9 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 		$user_access = $hanbs_option_group['data-user-'.$login.''];
 		
 		global $current_user;
-		get_currentuserinfo();
-		$logged_in = $current_user->user_login;
+		//get_currentuserinfo(); depr. since 4.5.0
+		wp_get_current_user(); 
+        $logged_in = $current_user->user_login;
 
 		if ($logged_in == $login) {
 			$logged_in_status = "logged-in";
@@ -424,12 +436,17 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 		?>
 		
 		<?php if ( $logged_in == $login ) : ?>
-
-		<input data-role="<?php echo $role; ?>" data-loggedin="true" class="user-access-option <?php echo $logged_in_status; ?>" type="checkbox" id="data-user-<?php echo $login; ?>" name="hanbs_option_name[data-user-<?php echo $login; ?>]" value="<?php echo $login; ?>" checked readonly /> <span class="small logged-in-notice"></span>
+			<label for="data-user-<?php echo $login; ?>">
+				<input data-role="<?php echo $role; ?>" data-loggedin="true" class="user-access-option <?php echo $logged_in_status; ?>" type="checkbox" id="data-user-<?php echo $login; ?>" name="hanbs_option_name[data-user-<?php echo $login; ?>]" value="<?php echo $login; ?>" checked readonly />
+				<span class="checkbox-proxy"></span>
+			</label>
+			<p class="logged-in-helper">You cannot remove acces for this user while logged in.</p>
 
 		<?php else: ?>
-
-		<input data-role="<?php echo $role; ?>" class="user-access-option <?php echo $logged_in_status; ?>" type="checkbox" id="data-user-<?php echo $login; ?>" name="hanbs_option_name[data-user-<?php echo $login; ?>]" value="<?php echo $login; ?>" <?php if ($user_access == $login) { echo 'checked'; } ?> />  
+			<label for="data-user-<?php echo $login; ?>">
+				<input data-role="<?php echo $role; ?>" class="user-access-option <?php echo $logged_in_status; ?>" type="checkbox" id="data-user-<?php echo $login; ?>" name="hanbs_option_name[data-user-<?php echo $login; ?>]" value="<?php echo $login; ?>" <?php if ($user_access == $login) { echo 'checked'; } ?> />  
+				<span class="checkbox-proxy"></span>
+			</label>
 
 		<?php endif; ?>
 		
@@ -447,7 +464,7 @@ if ( is_admin() ) {
 
 function hbs_enqueue_script() {
 	if ( ! is_admin() ) {
-		wp_enqueue_script( 'hbs', plugin_dir_url( __FILE__ ) . 'js/hbs.js', 'jquery' );
+		wp_enqueue_script( 'hbs', HBS_URL . 'js/hbs.js', 'jquery' );
 	}
 }
 
@@ -459,7 +476,8 @@ add_action('wp_enqueue_scripts', 'hbs_enqueue_script');
 
 function hanbs_add_custom_box() {
 	global $current_user;
-	get_currentuserinfo();
+    //get_currentuserinfo(); depr. since 4.5.0
+    wp_get_current_user(); 
 	$logged_in = $current_user->user_login;
 
 	$hanbs_option_group = get_option('hanbs_option_name');
@@ -508,12 +526,13 @@ function hanbs_customize_toolbar(){
 
 	$args = array(
 		'id'     => 'HBS',
-		'title' => __('<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/hanbootstrap/images/icons/hbs-hanson-logo-white.png" style="vertical-align:middle;margin-right:5px" alt="Han Bootstrapper" title="Han Bootstrapper" />HanBootStrapper' ),
+		'title' => __('<img src="'. HBS_URL . '/images/icons/hbs-hanson-logo-white.png" style="vertical-align:middle;margin-right:5px" alt="Han Bootstrapper" title="Han Bootstrapper" />HanBootStrapper' ),
 		'href'   => '/wp-admin/admin.php?page=hanbs-namespace-admin'
 	);
 
 	global $current_user;
-	get_currentuserinfo();
+    //get_currentuserinfo(); depr. since 4.5.0
+    wp_get_current_user(); 
 	$logged_in = $current_user->user_login;
 
 	$hanbs_option_group = get_option('hanbs_option_name');

@@ -69,4 +69,9 @@ $(document).ready(function(){
 			return;
 		}
 	});
+
+	//Select HBS functions when textarea is focused
+	$('.hbs-funk').on('click', function(){
+		$(this).select();
+	});
 });
