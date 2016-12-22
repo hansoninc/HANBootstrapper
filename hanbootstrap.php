@@ -55,7 +55,6 @@ class HanBsSettings {
 	public function han_bs_pluginpage() {
 
 		global $current_user;
-		//get_currentuserinfo();  depr. since 4.5.0
         wp_get_current_user();
 		$logged_in = $current_user->user_login;
 
@@ -423,7 +422,6 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 		$user_access = $hanbs_option_group['data-user-'.$login.''];
 		
 		global $current_user;
-		//get_currentuserinfo(); depr. since 4.5.0
 		wp_get_current_user(); 
         $logged_in = $current_user->user_login;
 
@@ -476,7 +474,6 @@ add_action('wp_enqueue_scripts', 'hbs_enqueue_script');
 
 function hanbs_add_custom_box() {
 	global $current_user;
-    //get_currentuserinfo(); depr. since 4.5.0
     wp_get_current_user(); 
 	$logged_in = $current_user->user_login;
 
@@ -531,7 +528,6 @@ function hanbs_customize_toolbar(){
 	);
 
 	global $current_user;
-    //get_currentuserinfo(); depr. since 4.5.0
     wp_get_current_user(); 
 	$logged_in = $current_user->user_login;
 
