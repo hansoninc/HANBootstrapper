@@ -3,7 +3,7 @@
  * Plugin Name: HanBootStrapper for WordPress
  * Plugin URI: http://hansoninc.com
  * Description: This plugin works in conjunction with the internal HanBootStrapper JS. This plugin installs the hbs.js and allows developers to hook in controllers based on pages, sections and actions.
- * Version: 1.12.23.16
+ * Version: 2.0
  * Author: Mike Louviere / HansonInc
  * Author URI: http://hansoninc.com
  * License: GPL2
@@ -35,18 +35,16 @@ if ( !defined( 'HBS_URL' ) ) {
 class HanBsSettings {
 	
 	/**
-	 * Holds the values to be used in the fields callbacks
-	 */
+	* Holds the values to be used in the fields callbacks
+	*/
 	private $options;
 	/**
-	 * Start up
-	 */
+	* Start up
+	*/
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'han_bs_pluginpage' ) );
 		add_action( 'admin_init', array( $this, 'page_init' ) );
 		add_action( 'admin_init', array( $this, 'enque_plugin_assets' ) );
-
-		
 	}	
 
 	/**
@@ -115,16 +113,15 @@ class HanBsSettings {
 			        return in_array( $pagenow, array( 'post.php', 'post-new.php' ) );
 			}
 
-			//if ( is_plugin_page() || is_edit_page() ) {  is_plugin_page is depr. with no replacement
             if ( is_edit_page() || is_plugin_page() ) {
-				wp_enqueue_style( 'hbs-css', HBS_URL . 'css/hbs.css' );
-				if ($_GET["page"] == "hanbs-namespace-admin") {
-					wp_enqueue_script( 'jquery-hbs', HBS_URL  . '/js/jquery.1.11.0.js', null, null, true );
+            	if ( $_GET["page"] == "hanbs-namespace-admin" && !$_GET["post"] ) {
+            		wp_enqueue_style( 'hbs-css', HBS_URL . 'css/hbs.css' );
+            		wp_enqueue_script( 'jquery-hbs', HBS_URL  . '/js/jquery.1.11.0.js', null, null, true );
 					wp_enqueue_script( 'hbs-validation', HBS_URL  . '/js/hbs_validation.js', 'jquery-hbs', '9880649384aea9f1ee166331c0a30daa', true );
+            	} else if ( $_GET["page"] == "hanbs-namespace-admin" || $_GET["post"] ) {
+					wp_enqueue_style( 'hbs-css', HBS_URL . 'css/hbs.css' );
 				}
 			}
-            
-            
 		}
 	}
 
