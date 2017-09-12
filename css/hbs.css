@@ -187,7 +187,7 @@ div.submit-alert.hide {
 	box-shadow:inset 0 0 10px 0 #006799;
 }
 
-.form-table input[type="checkbox"] {
+.form-table input[type="checkbox"].user-access-option {
 	position: absolute;
 	left: -9999px;
 }
@@ -196,7 +196,7 @@ div.submit-alert.hide {
 	position: relative;
 }
 
-.form-table input[type="checkbox"] + .checkbox-proxy {
+.form-table input[type="checkbox"].user-access-option + .checkbox-proxy {
 	width: 60px;
 	height: 30px;
 	border: 1px solid #dedede;
@@ -210,12 +210,12 @@ div.submit-alert.hide {
 	top: 5px;
 }
 
-.form-table input[type="checkbox"]:checked + .checkbox-proxy {
+.form-table input[type="checkbox"].user-access-option:checked + .checkbox-proxy {
 	background: #0085ba;
 	border-color: #0073aa #006799 #006799;
 }
 
-.form-table input[type="checkbox"] + .checkbox-proxy:before {
+.form-table input[type="checkbox"].user-access-option + .checkbox-proxy:before {
 	content: '';
 	position: absolute;
 	top: 2px;
@@ -235,13 +235,13 @@ div.submit-alert.hide {
 	box-sizing: border-box;
 }
 
-.form-table input[type="checkbox"]:checked + .checkbox-proxy:before {
+.form-table input[type="checkbox"].user-access-option:checked + .checkbox-proxy:before {
 	left: 32px;
 	-webkit-box-shadow: 0 3px 3px 0 rgba(0,65,91,0.5);
 	box-shadow: 0 3px 3px 0 rgba(0,65,91,0.5);
 }
 
-.form-table input[type="checkbox"][readonly] + .checkbox-proxy {
+.form-table input[type="checkbox"].user-access-option[readonly] + .checkbox-proxy {
 	opacity: 0.25;
 	cursor: not-allowed;
 }

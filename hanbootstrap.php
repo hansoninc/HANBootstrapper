@@ -3,7 +3,7 @@
  * Plugin Name: HanBootStrapper for WordPress
  * Plugin URI: http://hansoninc.com
  * Description: This plugin works in conjunction with the internal HanBootStrapper JS. This plugin installs the hbs.js and allows developers to hook in controllers based on pages, sections and actions.
- * Version: 2.0
+ * Version: 2.0.1
  * Author: Mike Louviere / HansonInc
  * Author URI: http://hansoninc.com
  * License: GPL2
