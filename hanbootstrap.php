@@ -3,7 +3,7 @@
  * Plugin Name: HanBootStrapper for WordPress
  * Plugin URI: http://hansoninc.com
  * Description: This plugin works in conjunction with the internal HanBootStrapper JS. This plugin installs the hbs.js and allows developers to hook in controllers based on pages, sections and actions.
- * Version: 2.0.1
+ * Version: 3.0
  * Author: Mike Louviere / HansonInc
  * Author URI: http://hansoninc.com
  * License: GPL2
@@ -183,6 +183,14 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 		);
 
 		add_settings_field(
+			'hanbs_assetpath', // ID
+			'Javascript Path:', // Title
+			array( $this, 'hanbs_assetpath_callback' ), // Callback
+			'hanbs-namespace-admin', // Page
+			'general' // Section
+		);
+
+		add_settings_field(
 			'hanbs_debug', // ID
 			'PHP Debugging:', // Title
 			array( $this, 'hanbs_debug_callback' ),  // Callback
@@ -278,6 +286,10 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 			$new_input['hanbs_namespace'] = sanitize_text_field( $input['hanbs_namespace'] );
 		}
 
+		if( isset( $input['hanbs_assetpath'] ) ) {
+			$new_input['hanbs_assetpath'] = sanitize_text_field( $input['hanbs_assetpath'] );
+		}
+
 		if( isset( $input['hanbs_debug'] ) ) {
 			$new_input['hanbs_debug'] = sanitize_text_field( $input['hanbs_debug'] );
 		}
@@ -337,6 +349,16 @@ data-page="&lt;?php get_data_page(); ?&gt;"</textarea>
 		printf(
 			'<input type="text" id="hanbs_namespace" name="hanbs_option_name[hanbs_namespace]" value="%s" maxlength="3"/>',
 			isset( $this->options['hanbs_namespace'] ) ? esc_attr( $this->options['hanbs_namespace']) : 'HAN'
+		);
+	}
+
+	/**
+	 * Get the settings option array and print one of its values
+	 */
+	public function hanbs_assetpath_callback() {
+		printf(
+			'<input type="text" id="hanbs_assetpath" name="hanbs_option_name[hanbs_assetpath]" value="%s" maxlength="100"/> <small>This path is theme root relative.</small>',
+			isset( $this->options['hanbs_assetpath'] ) ? esc_attr( $this->options['hanbs_assetpath']) : '/assets/js/'
 		);
 	}
 
@@ -551,6 +573,17 @@ function get_namespace_from_option() {
 	 return $hanbs_namespace;
 }
 
+function get_assetpath_from_option() {
+	$hanbs_option_group = get_option('hanbs_option_name');
+
+	if ($hanbs_option_group['hanbs_assetpath']) {
+		$hanbs_assetpath = $hanbs_option_group['hanbs_assetpath'];
+	} else {
+		$hanbs_assetpath = "/assets/js/";
+	}
+	 return $hanbs_assetpath;
+}
+
 function is_debugging() {
 	$hanbs_option_group = get_option('hanbs_option_name');
 
@@ -592,7 +625,7 @@ function hanbs_inner_custom_box( $post ) {
 
 
 	if ($post_type == 'page') {
-		echo '<div class="clearfix post-box"><h4>Data Section should match the name of the JavaScript controller you wish to enque.<br> Example: /assets/js/'.get_namespace_from_option().'/'.'controllers/'.$datasection_placeholder.'.js. Where '.$datasection_placeholder.' is the controller name.</h4></div>';
+		echo '<div class="clearfix post-box"><h4>Data Section should match the name of the JavaScript controller you wish to enque.<br> Example: '.get_assetpath_from_option().get_namespace_from_option().'/'.'controllers/'.$datasection_placeholder.'.js. Where '.$datasection_placeholder.' is the controller name.</h4></div>';
 		echo '<div class="fields-wrap"><div class="clearfix field-box"><p class="field-label"><label for="hanbs_new_field">';
 		   _e( "Data Section:", 'hanbs_textdomain' );
 		echo '</label></p>';
@@ -623,7 +656,7 @@ function hanbs_inner_custom_box( $post ) {
 			$datapage = get_post_meta( $post->ID, '_hanbs_datapage', true );
 		}
 
-		echo '<div class="clearfix post-box"><h4>Data Section should match the name of the JavaScript controller you wish to enque.<br> Example: /assets/js/'.get_namespace_from_option().'/'.'controllers/'.$datasection_placeholder.'.js. Where '.$datasection_placeholder.' is the controller name.</h4></div>';
+		echo '<div class="clearfix post-box"><h4>Data Section should match the name of the JavaScript controller you wish to enque.<br> Example: /'.get_assetpath_from_option().get_namespace_from_option().'/'.'controllers/'.$datasection_placeholder.'.js. Where '.$datasection_placeholder.' is the controller name.</h4></div>';
 		echo '<div class="fields-wrap"><div class="clearfix field-box"><p class="field-label"><label for="hanbs_new_field">';
 		   _e( "Data Section:", 'hanbs_textdomain' );
 		echo '</label></p>';
@@ -737,14 +770,14 @@ function enque_section_script() {
 
 	$data_section = get_post_meta( get_the_ID(), '_hanbs_datasection', true );
 	if ( !empty( $data_section ) ) {
-		$section_js = get_template_directory_uri()."/assets/js/".get_namespace_from_option()."/controllers/$data_section.js";
+		$section_js = get_template_directory_uri().get_assetpath_from_option().get_namespace_from_option()."/controllers/$data_section.js";
 
 		$themedirectory = end((explode('/', get_template_directory())));
-		$section_path = get_template_directory()."/assets/js/".get_namespace_from_option()."/controllers/$data_section.js";
+		$section_path = get_template_directory().get_assetpath_from_option().get_namespace_from_option()."/controllers/$data_section.js";
 
 		if ( is_debugging() && !file_exists($section_path) ) {
 			if ( is_debugging() ) {
-				echo "<script>console.log('HBS NOTICE: Cannot bootstrap section controller, file missing: /assets/js/".get_namespace_from_option()."/controllers/$data_section.js');</script>";
+				echo "<script>console.log('HBS NOTICE: Cannot bootstrap section controller, file missing: ".get_assetpath_from_option().get_namespace_from_option()."/controllers/$data_section.js');</script>";
 			}
 		} else {
 			wp_register_script($data_section, $section_js, array(), null, false);
