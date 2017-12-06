@@ -656,7 +656,7 @@ function hanbs_inner_custom_box( $post ) {
 			$datapage = get_post_meta( $post->ID, '_hanbs_datapage', true );
 		}
 
-		echo '<div class="clearfix post-box"><h4>Data Section should match the name of the JavaScript controller you wish to enque.<br> Example: /'.get_assetpath_from_option().get_namespace_from_option().'/'.'controllers/'.$datasection_placeholder.'.js. Where '.$datasection_placeholder.' is the controller name.</h4></div>';
+		echo '<div class="clearfix post-box"><h4>Data Section should match the name of the JavaScript controller you wish to enque.<br> Example: '.get_assetpath_from_option().get_namespace_from_option().'/'.'controllers/'.$datasection_placeholder.'.js. Where '.$datasection_placeholder.' is the controller name.</h4></div>';
 		echo '<div class="fields-wrap"><div class="clearfix field-box"><p class="field-label"><label for="hanbs_new_field">';
 		   _e( "Data Section:", 'hanbs_textdomain' );
 		echo '</label></p>';
