@@ -1,4 +1,4 @@
-# Change Log for Plugin Version 4.0
+### Change Log for Plugin Version 4.0
 
 * General
     * Updating Hanson Logo and Branding across all plugin option panels and toolbars
