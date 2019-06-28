@@ -1,3 +1,21 @@
+# Change Log for Plugin Version 4.0
+
+* General
+    * Updating Hanson Logo and Branding across all plugin option panels and toolbars
+    * Core Plugin Performance Improvements
+* PHP 7 Updates
+    * Converting concatenated string->variables to use template strings
+    * Cleaned up sanitation of fields to prevent saving unchanged values
+    * Adding help link to core Plugin options page to GitHub
+    * Core plugin restructure
+        * Splitting plugin Admin options panel logic into /includes
+        * Splitting logic that enqueues scripts on Theme front-end into /includes
+        * Splitting helpers used across back-end and front-end into /helpers
+* Bug Fixes
+    * Fixed issue where plugin stylesheet wasn’t being Enqued when adding a new page or post due to change in WP Core but would appear when editing existing pages and posts
+
+
+
 # HanBootStrapper-for-WordPress
 This plugin works in conjunction with the internal HanBootStrapper JS. This plugin installs hbs.js automatically and allows developers to hook in javascript controllers based on pages, sections and actions.
 
