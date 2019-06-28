@@ -76,17 +76,17 @@ small.footnote {
 }
 
 .field-label-prefix {
-	background: #0085ba;
-	-webkit-box-shadow:inset 0 0 10px 0 #006799;
-	box-shadow:inset 0 0 10px 0 #006799;
+	background: #7B42F8;
+	-webkit-box-shadow:inset 0 0 10px 0 #37147C;
+	box-shadow:inset 0 0 10px 0 #37147C;
 	display: inline-block;
 	vertical-align: top;
 	padding: 9px 10px 10px 10px;
-	border: 1px solid #0073aa;
+	border: 1px solid #37147C;
 	position: relative;
 	right: -1px;
 	color: #fff;
-	text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+	text-shadow: 0 -1px 1px #37147C, 1px 0 1px #37147C, 0 1px 1px #37147C, -1px 0 1px #37147C;
 }
 
 .cpt-field-wrap {
@@ -179,12 +179,12 @@ div.submit-alert.hide {
 
 #hanbs_debug_yes:checked + label,
 #hanbs_debug_off:checked + label { 
-	background: #0085ba;
-	border-color: #0073aa #006799 #006799;
+	background: #7B42F8;
+	border-color: #37147C #37147C #37147C;
 	color: white;
-	text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
-	-webkit-box-shadow:inset 0 0 10px 0 #006799;
-	box-shadow:inset 0 0 10px 0 #006799;
+	text-shadow: 0 -1px 1px #37147C, 1px 0 1px #37147C, 0 1px 1px #37147C, -1px 0 1px #37147C;
+	-webkit-box-shadow:inset 0 0 10px 0 #37147C;
+	box-shadow:inset 0 0 10px 0 #37147C;
 }
 
 .form-table input[type="checkbox"].user-access-option {
@@ -211,8 +211,8 @@ div.submit-alert.hide {
 }
 
 .form-table input[type="checkbox"].user-access-option:checked + .checkbox-proxy {
-	background: #0085ba;
-	border-color: #0073aa #006799 #006799;
+	background: #7B42F8;
+	border-color: #37147C #37147C #37147C;
 }
 
 .form-table input[type="checkbox"].user-access-option + .checkbox-proxy:before {
@@ -260,7 +260,7 @@ div.submit-alert.hide {
 	opacity: 0;
 	top: -10px;
 	left: 1px;
-	color: #0085ba;
+	color: #7B42F8;
 	font-weight: bold;
 	font-size: 21px;
 	content: '✓';
