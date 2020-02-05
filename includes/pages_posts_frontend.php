@@ -27,10 +27,10 @@ function enque_section_script()
 
 	if ( !empty( $data_section ) ) 
 	{
-		$section_js = get_template_directory_uri().get_assetpath_from_option().get_namespace_from_option()."/controllers/$data_section.js";
+		$section_js = get_stylesheet_directory_uri().get_assetpath_from_option().get_namespace_from_option()."/controllers/$data_section.js";
 
 		$themedirectory = end((explode('/', get_template_directory())));
-		$section_path = get_template_directory().get_assetpath_from_option().get_namespace_from_option()."/controllers/$data_section.js";
+		$section_path = get_stylesheet_directory().get_assetpath_from_option().get_namespace_from_option()."/controllers/$data_section.js";
 
 		if ( is_debugging() && !file_exists($section_path) ) 
 		{
