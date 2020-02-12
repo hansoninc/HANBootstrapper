@@ -16,7 +16,7 @@
 
 
 
-# HanBootStrapper-for-WordPress
+# HanBootStrapper 
 This plugin works in conjunction with the internal HanBootStrapper JS. This plugin installs hbs.js automatically and allows developers to hook in javascript controllers based on pages, sections and actions.
 
 ![HBS Main Screen](https://github.com/hansoninc/HanBootStrapper-for-WordPress/blob/master/images/screens/hbs-screen.png)
